@@ -64,7 +64,6 @@ int leNumVertices(FILE *arq){
 
   char num_char[qtdAlgarismo+1];
   fgets(num_char, sizeof(num_char), arq); // lê do arq a primeira linha e guarda em num_char
-
   int num_int = 0;
   for (int i = qtdAlgarismo, j = 0; i>0; i--, j++){ // transforma char em int
     num_int += (num_char[j]-48) * pow(10, i-1);     // num * 10^i
@@ -73,17 +72,17 @@ int leNumVertices(FILE *arq){
   return num_int;
 }
 
-int** alocaMatriz(int qtdArestas){
+int** alocaMatriz(int linha, int coluna){
 
-  int **matriz = (int**)malloc(qtdArestas*sizeof(int*));
-  for (int i=0; i<qtdArestas; i++)
-    matriz[i] = (int*)malloc(qtdArestas*sizeof(int));
+  int **matriz = (int**)malloc(linha*sizeof(int*));
+  for (int i=0; i<linha; i++)
+    matriz[i] = (int*)malloc(coluna*sizeof(int));
 
   return matriz;
 }
 
-int leArestas(FILE *arq, int qtdArestas){
-  int **mat = alocaMatriz(qtdArestas);
+int** leArestas(FILE *arq, int qtdArestas){
+  int **mat = alocaMatriz(qtdArestas, 2);
   char c;
   for (int i=0; i < qtdArestas; i++){
     for (int j=0; (c = fgetc(arq)) != '\n' && !feof(arq); j++){
@@ -101,31 +100,31 @@ int leArestas(FILE *arq, int qtdArestas){
     }
     fscanf(arq, "\n");
   }
-  return (int**)mat;
+  return mat;
 }
 
 
-Grafo* cria_Grafo(int nro_vertices, int grau_max){
+Grafo* criaGrafo(int numVertices, int grau_max){
     Grafo *gr;
     gr = (Grafo*) malloc(sizeof(struct grafo));
     if(gr != NULL){
         int i;
-        gr->nro_vertices = nro_vertices;
+        gr->numVertices = numVertices;
         gr->grau_max = grau_max;
-        gr->grau = (int*) calloc(nro_vertices,sizeof(int));
+        gr->grau = (int*) calloc(numVertices,sizeof(int));
 
-        gr->arestas = (int**) malloc(nro_vertices * sizeof(int*));
-        for(i=0; i<nro_vertices; i++)
+        gr->arestas = (int**) malloc(numVertices * sizeof(int*));
+        for(i=0; i<numVertices; i++)
             gr->arestas[i] = (int*) malloc(grau_max * sizeof(int));
 
     }
     return gr;
 }
 
-void libera_Grafo(Grafo* gr){
+void liberaGrafo(Grafo* gr){
     if(gr != NULL){
         int i;
-        for(i=0; i<gr->nro_vertices; i++)
+        for(i=0; i<gr->numVertices; i++)
             free(gr->arestas[i]);
         free(gr->arestas);
 
@@ -136,31 +135,46 @@ void libera_Grafo(Grafo* gr){
 
 
 int insereAresta(Grafo* gr, int orig, int dest){
-  printf("?");
-    if(gr == NULL)
-        return 0;
-    if(orig < 0 || orig >= gr->nro_vertices)
-        return 0;                             // verifica se o vertice existe
-    if(dest < 0 || dest >= gr->nro_vertices)
-        return 0;
-    if (gr->grau[orig] == gr->grau_max || gr->grau[dest] == gr->grau_max)     // limite de arestas para o vertice
-        return 0;
+    if(gr == NULL){
+      printf("a1");
+      return 0;
+    }
+    if (orig == dest){
+      printf("a2");
+
+      return 0;
+    }
+    if(orig < 0 || orig >= gr->numVertices){
+      printf("a3");
+
+      return 0;                             // verifica se o vertice existe
+    }
+    if(dest < 0 || dest >= gr->numVertices){
+      printf("a4");
+
+      return 0;
+    }
+    if (gr->grau[orig] == gr->grau_max || gr->grau[dest] == gr->grau_max){
+      printf("a5");
+
+      return 0;
+    }     // limite de arestas para o vertice
     gr->arestas[orig][gr->grau[orig]] = dest; // cria uma aresta entre v1 e v2
     gr->arestas[dest][gr->grau[dest]] = orig; // cria uma aresta entre v2 e v1
                                               // conceito de grafo não direcionado
-      gr->grau[orig]++;
-      gr->grau[dest]++;
+    gr->grau[orig]++;
+    gr->grau[dest]++;
 
-
+    // printf("opa\n");
     return 1;
 }
 
 int removeAresta(Grafo* gr, int orig, int dest){
     if(gr == NULL)
         return 0;
-    if(orig < 0 || orig >= gr->nro_vertices)
+    if(orig < 0 || orig >= gr->numVertices)
         return 0;
-    if(dest < 0 || dest >= gr->nro_vertices)
+    if(dest < 0 || dest >= gr->numVertices)
         return 0;
 
     int i = 0;
@@ -173,12 +187,12 @@ int removeAresta(Grafo* gr, int orig, int dest){
      return 1;
 }
 
-void imprime_Grafo(Grafo *gr, FILE* arq){
+void imprimeGrafo(Grafo *gr, FILE* arq){
     if(gr == NULL)
         return;
 
     int i, j;
-    for(i=0; i < gr->nro_vertices; i++){
+    for(i=0; i < gr->numVertices; i++){
         fprintf(arq, "%d: ", i);
         for(j=0; j < gr->grau[i]; j++){
                  fprintf(arq, "%d, ", gr->arestas[i][j]);

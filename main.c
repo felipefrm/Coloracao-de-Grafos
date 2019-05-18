@@ -10,15 +10,25 @@ int main(int argc, char *argv[]){
     int numVertices = leNumVertices(arq->entrada);
     int **mat = leArestas(arq->entrada, qtdArestas);
     fclose(arq->entrada);
-    printf("opa");
-    Grafo* gr = cria_Grafo(numVertices, 10);
+    Grafo* gr = criaGrafo(numVertices, 10);
+    printf("qtd: %d\n", qtdArestas);
+    // for (int i=0; i<qtdArestas; i++)
+    //   for (int j=0; j<2; j++)
+    //     printf("%d ", mat[i][j]);
+    //   printf("\n");
 
-    for (int i=0; i<qtdArestas; i++)
-        insereAresta(gr, mat[i][0], mat[i][1]);
+    for (int i=1; i<qtdArestas; i++){
 
-    imprime_Grafo(gr, arq->saida);
+        // printf("v1: %d e v2: %d\n", mat[i][0], mat[i][1]);
+        if (!insereAresta(gr, mat[i][0], mat[i][1])) {
+          fprintf(stderr, "Falha na inserção da aresta. Cheque o arquivo de entrada.\n");
+          return 0;
+        }
+      }
+
+    imprimeGrafo(gr, arq->saida);
     fclose(arq->saida);
 
-    libera_Grafo(gr);
+    liberaGrafo(gr);
   }
 }

@@ -8,24 +8,24 @@ struct arquivos {
 }; typedef struct arquivos Arquivos;
 
 struct grafo {
-    int nro_vertices;
+    int numVertices;
     int grau_max;
     int** arestas;
     int* grau;
     int cor;
 }; typedef struct grafo Grafo;
 
-Grafo* cria_Grafo(int nro_vertices, int grau_max);
-void libera_Grafo(Grafo* gr);
+Grafo* criaGrafo(int numVertices, int grau_max);
+void liberaGrafo(Grafo* gr);
 int insereAresta(Grafo* gr, int orig, int dest);
 int removeAresta(Grafo* gr, int orig, int dest);
-void imprime_Grafo(Grafo *gr, FILE* arq);
+void imprimeGrafo(Grafo *gr, FILE* arq);
 
-int** alocaMatriz(int qtdArestas);
+int** alocaMatriz(int linha, int coluna);
 Arquivos* argumentosEntrada(int argc, char* argv[]);
 int verificaArqVazio(FILE* arq);
 int calculaQtdArestas(FILE* arq);
-int leArestas(FILE *arq, int qtdArestas);
+int** leArestas(FILE *arq, int qtdArestas);
 int leNumVertices(FILE *arq);
 
 #endif
