@@ -1,31 +1,30 @@
 #ifndef GRAFO
 #define GRAFO
 
-struct arquivos {
-  FILE* entrada;
-  FILE* saida;
-  int flag;   // flag para poder retornar 0 em caso de erro
-}; typedef struct arquivos Arquivos;
+// struct grafo {
+//     int numVertices;
+//     int grau_max;
+//     int** arestas;
+//     int* grau;
+//     int cor;
+// }; typedef struct grafo Grafo;
 
-struct grafo {
-    int numVertices;
-    int grau_max;
-    int** arestas;
-    int* grau;
-    int cor;
-}; typedef struct grafo Grafo;
+#define TRUE 1
+#define FALSE 0
 
-Grafo* criaGrafo(int numVertices, int grau_max);
+typedef struct grafo {
+	int vertice;
+	int aresta;
+	int** MatAdj;        // Matriz de adjacencia
+} Grafo;
+
+
+Grafo* inicializaGrafo(int numVertices);
 void liberaGrafo(Grafo* gr);
-int insereAresta(Grafo* gr, int orig, int dest);
-int removeAresta(Grafo* gr, int orig, int dest);
-void imprimeGrafo(Grafo *gr, FILE* arq);
+int insereAresta(Grafo* gr, int i, int j);
+int removeAresta(Grafo* gr, int i, int j);
+void imprimeGrafo(Grafo* gr, int numVertices, FILE* arq);
 
-int** alocaMatriz(int linha, int coluna);
-Arquivos* argumentosEntrada(int argc, char* argv[]);
-int verificaArqVazio(FILE* arq);
-int calculaQtdArestas(FILE* arq);
-int** leArestas(FILE *arq, int qtdArestas);
-int leNumVertices(FILE *arq);
+
 
 #endif
