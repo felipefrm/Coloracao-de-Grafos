@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grafo.h"
+#include "coloracao.h"
 #include "entradaSaida.h"
 
 int main(int argc, char *argv[]){
@@ -12,20 +13,24 @@ int main(int argc, char *argv[]){
     int **mat = leArestas(arq->entrada, qtdArestas);
     fclose(arq->entrada);
     Grafo* gr = inicializaGrafo(numVertices);
-    printf("qtd: %d\n", qtdArestas);
-    // for (int i=0; i<qtdArestas; i++)
-    //   for (int j=0; j<2; j++)
-    //     printf("%d ", mat[i][j]);
-    //   printf("\n");
 
-    for (int i=1; i<qtdArestas; i++){
-
-        if (!insereAresta(gr, mat[i][0], mat[i][1])) {
-          fprintf(stderr, "Falha na inserção da aresta. Cheque o arquivo de entrada.\n");
-          return 0;
-        }
+    for (int i=1; i<qtdArestas; i++)
+      if (!insereAresta(gr, mat[i][0], mat[i][1])) {
+        fprintf(stderr, "Falha na inserção da aresta. Cheque o arquivo de entrada.\n");
+        return 0;
       }
 
+    double utime_ant, utime_pos, stime_ant, stime_pos;
+    int k = 1; // numero de cores
+    contaTempoProcessador(&utime_ant, &stime_ant);
+    while (1){
+    if (Backtracking(gr->MatAdj, k, 0, numVertices))
+      break;
+    k++;
+    }
+    contaTempoProcessador(&utime_pos, &stime_pos);
+    imprimeTempo(utime_pos-utime_ant, stime_pos-stime_ant, arq->saida);
+    fprintf(arq->saida  , "%d\n", k);
     imprimeGrafo(gr, numVertices, arq->saida);
     fclose(arq->saida);
 

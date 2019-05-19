@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <math.h>
+#include <sys/resource.h>
 #include "entradaSaida.h"
 
 Arquivos* argumentosEntrada(int argc, char* argv[]){
@@ -101,4 +102,16 @@ int** leArestas(FILE *arq, int qtdArestas){
     fscanf(arq, "\n");
   }
   return mat;
+}
+
+void contaTempoProcessador(double *utime, double *stime){
+  struct rusage resources;
+  getrusage(RUSAGE_SELF, &resources);
+  *utime = (double) resources.ru_utime.tv_sec + 1.e-6 * (double) resources.ru_utime.tv_usec;
+  *stime = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
+}
+
+void imprimeTempo(double user_time, double system_time, FILE* arq){
+  fprintf(arq, "Tempo de execução:\n");
+  fprintf(arq, "%fs (tempo de usuário) + %fs (tempo de sistema) = %fs (tempo total)\n\n", user_time, system_time, user_time+system_time);
 }
