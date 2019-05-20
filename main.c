@@ -20,6 +20,8 @@ int main(int argc, char *argv[]){
         return 0;
       }
 
+    calculaGrau(gr);
+
     double utime_ant, utime_pos, stime_ant, stime_pos;
     int k = 1; // numero de cores
     contaTempoProcessador(&utime_ant, &stime_ant);
@@ -31,9 +33,10 @@ int main(int argc, char *argv[]){
     contaTempoProcessador(&utime_pos, &stime_pos);
     imprimeTempo(utime_pos-utime_ant, stime_pos-stime_ant, arq->saida);
     fprintf(arq->saida  , "%d\n", k);
-    imprimeGrafo(gr, numVertices, arq->saida);
+    imprimeGrafo(gr, arq->saida);
     fclose(arq->saida);
 
+    heuristica1(gr);
     liberaGrafo(gr);
   }
 }
