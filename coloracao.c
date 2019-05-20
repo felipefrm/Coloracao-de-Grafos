@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "coloracao.h"
+#include "grafo.h"
 
 /* Função utilitaria que verifica se a cor atribuida é possível para o vertice.
    Isto é, checa se a aresta existe ou não (MatAdj[v][i] == 1), se existe, então é
@@ -56,4 +57,38 @@ int Backtracking(int **MatAdj, int k, int src, int numVertices){
 
   // chama coloracaoVertice() a partir do vertice de origem
   return coloracaoVertice(MatAdj, cor, k, src, numVertices);
+}
+
+void insertionSort(indiceVetor* ivetor, int numVertices){
+    int i, j;
+    indiceVetor key;
+    for (i = 1; i < numVertices; i++){
+        key = ivetor[i];
+        j = i - 1;
+        while (j >= 0 && ivetor[j].grau < key.grau){
+            ivetor[j + 1] = ivetor[j];
+            j = j - 1;
+        }
+        ivetor[j + 1] = key;
+    }
+}
+
+void inicializaVetorIndice(indiceVetor* ivetor, Grafo* gr){
+    int i;
+    for(i = 0; i < gr->numVertices; i++){
+      ivetor[i].vertice = i;
+      ivetor[i].grau = gr->grau[i];
+    }
+    insertionSort(ivetor,gr->numVertices);
+}
+
+int heuristica1(Grafo* gr){
+  /* Primeiro, criamos um vetor de struct indiceVetor que guarda o número dos vértices
+  e o seu respectivo grau. Depois, na função inicializaVetorIndice, salvamos os valores no vetor
+  e ordenamos ele com a função insertionSort*/
+  indiceVetor* ivetor = malloc(gr->numVertices* sizeof(indiceVetor));
+  inicializaVetorIndice(ivetor,gr);
+  printf("\n vetor: ");
+  for(int i=0;i<gr->numVertices;i++)
+    printf("%d ",ivetor[i].vertice);
 }
