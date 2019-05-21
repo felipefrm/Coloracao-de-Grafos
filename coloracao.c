@@ -59,36 +59,61 @@ int Backtracking(int **MatAdj, int k, int src, int numVertices){
   return coloracaoVertice(MatAdj, cor, k, src, numVertices);
 }
 
-void insertionSort(indiceVetor* ivetor, int numVertices){
+void insertionSort(Vertice* V, int numVertices){
     int i, j;
-    indiceVetor key;
+    Vertice key;
     for (i = 1; i < numVertices; i++){
-        key = ivetor[i];
+        key = V[i];
         j = i - 1;
-        while (j >= 0 && ivetor[j].grau < key.grau){
-            ivetor[j + 1] = ivetor[j];
+        while (j >= 0 && V[j].grau < key.grau){
+            V[j + 1] = V[j];
             j = j - 1;
         }
-        ivetor[j + 1] = key;
+        V[j + 1] = key;
     }
 }
 
-void inicializaVetorIndice(indiceVetor* ivetor, Grafo* gr){
+Vertice*  inicializaVetor( Grafo* gr){
+  Vertice* V = malloc(gr->numVertices* sizeof(Vertice));
     int i;
     for(i = 0; i < gr->numVertices; i++){
-      ivetor[i].vertice = i;
-      ivetor[i].grau = gr->grau[i];
+      V[i].id = i;
+      V[i].grau = gr->grau[i];
+      V[i].corDefinitiva = FALSE;
+      V[i].cor = 0;
     }
-    insertionSort(ivetor,gr->numVertices);
+    insertionSort(V,gr->numVertices);
+    return V;
 }
 
 int heuristica1(Grafo* gr){
-  /* Primeiro, criamos um vetor de struct indiceVetor que guarda o número dos vértices
-  e o seu respectivo grau. Depois, na função inicializaVetorIndice, salvamos os valores no vetor
+  /* Primeiro, criamos um vetor de struct Vertice que guarda o número dos vértices
+  e o seu respectivo grau. Depois, na função inicializaVetor, salvamos os valores no vetor
   e ordenamos ele com a função insertionSort*/
-  indiceVetor* ivetor = malloc(gr->numVertices* sizeof(indiceVetor));
-  inicializaVetorIndice(ivetor,gr);
-  printf("\n vetor: ");
-  for(int i=0;i<gr->numVertices;i++)
-    printf("%d ",ivetor[i].vertice);
+  Vertice* V = inicializaVetor(gr);
+  int* cores = calloc(gr->numVertices,sizeof(int));
+  for(int i=0; i < gr->numVertices;i++)
+    cores[i] = i;
+  // printf("\n vetor: ");
+  // for(int i=0;i<gr->numVertices;i++)
+  //   printf("%d ",V[i].id);
+  for(int i=0; i < gr->numVertices; i++){
+    V[i].corDefinitiva = TRUE;
+    V[i].cor = 1;
+    int controle = 0;
+    while(V[i].cor > controle){
+    for(int j = 0; j<gr->numVertices;j++){
+      if(gr->MatAdj[i][j] && V[i].cor == V[j].cor)
+        V[i].cor++;
+        break;
+    }
+    controle++;
+  }
+
+    for(int j =0; j<gr->numVertices;j++){
+      if(gr->MatAdj[i][j] && !V[j].corDefinitva){
+        V[j].cor = V[i].cor ;
+      }
+    }
+  }
 }
