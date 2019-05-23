@@ -16,25 +16,25 @@ int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int numVertices){
 }
 
 // Função recursiva que retorna no fim o valor minimo k de cor para dado grafo
-int coloracaoVertice(int **MatAdj, int *cor, int k, int v, int numVertices) {
+int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int numVertices) {
 
-  if(v == numVertices)  // Caso base: se todos os vertices já estão coloridos
+  if(vertice == numVertices)  // Caso base: se todos os vertices já estão coloridos
       return 1;
 
   else {
-    // verifica diferente cores para o vertice v
+    // verifica diferente cores para o vertice
     for(int c = 1; c <= k; c++){
       //verifica se a cor atual pode ser atribuida ao vertice
-      if(verificaCor(MatAdj, cor, c, v, numVertices)) {
-        cor[v] = c;
+      if(verificaCor(MatAdj, cor, c, vertice, numVertices)) {
+        cor[vertice] = c;
         // recursividade para colorir o restante dos vertices
-        if(coloracaoVertice(MatAdj, cor, k, v+1, numVertices)){
+        if(coloracaoVertice(MatAdj, cor, k, vertice+1, numVertices)){
           return 1;
         }
 
         /*se c não for hábil para colorir o vertice, é testado uma nova cor
-          removendo a atribuição feita anteriormente (cor[v] = c)*/
-        cor[v] = 0;
+          removendo a atribuição feita anteriormente (cor[vertice] = c)*/
+        cor[vertice] = 0;
       }
     }
     /* se todas as cores forem verificas e não foi possível colorir todo o gráfico
@@ -48,7 +48,7 @@ int coloracaoVertice(int **MatAdj, int *cor, int k, int v, int numVertices) {
    Backtracking. É usado recursivimente ColouringUtil() para resolver o problema
    A função retorna falso caso não seja possivel colorir com k cores e true
    se for possível. */
-int Backtracking(int **MatAdj, int k, int src, int numVertices){
+int Backtracking(int **MatAdj, int k, int numVertices){
 
   int cor[numVertices];
 
@@ -56,7 +56,17 @@ int Backtracking(int **MatAdj, int k, int src, int numVertices){
     cor[i]= 0;  // seta a cor de todos os vertices como 0
 
   // chama coloracaoVertice() a partir do vertice de origem
-  return coloracaoVertice(MatAdj, cor, k, src, numVertices);
+  return coloracaoVertice(MatAdj, cor, k, 0, numVertices);
+}
+
+int AlgoritmoExato(int **MatAdj, int numVertices){
+  int k = 1;
+  while (1){
+  if (Backtracking(MatAdj, k, numVertices))
+    break;
+  k++;
+  }
+  return k;
 }
 
 void insertionSort(Vertice* V, int numVertices){
@@ -73,7 +83,7 @@ void insertionSort(Vertice* V, int numVertices){
     }
 }
 
-Vertice*  inicializaVetor( Grafo* gr){
+Vertice*  inicializaVetor(Grafo* gr){
   Vertice* V = malloc(gr->numVertices* sizeof(Vertice));
     for(int i = 0; i < gr->numVertices; i++){
       V[i].id = i;
@@ -90,9 +100,9 @@ int heuristica1(Grafo* gr){
   e o seu respectivo grau. Depois, na função inicializaVetor, salvamos os valores no vetor
   e ordenamos ele com a função insertionSort*/
   Vertice* V = inicializaVetor(gr);
-  V[i].corDefinitiva = TRUE;
   int k = 1;
   for(int i=0; i < gr->numVertices; i++){
+    V[i].corDefinitiva = TRUE;
     V[i].cor = 1;
     int controle = 0;
     while(V[i].cor > controle){

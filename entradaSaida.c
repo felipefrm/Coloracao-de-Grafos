@@ -115,3 +115,9 @@ void imprimeTempo(double user_time, double system_time, FILE* arq){
   fprintf(arq, "Tempo de execução:\n");
   fprintf(arq, "%fs (tempo de usuário) + %fs (tempo de sistema) = %fs (tempo total)\n\n", user_time, system_time, user_time+system_time);
 }
+
+void liberaArquivos(Arquivos *arq){
+  fclose(arq->entrada);
+  fclose(arq->saida);
+  free(arq);
+}

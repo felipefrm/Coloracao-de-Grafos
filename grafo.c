@@ -13,6 +13,7 @@ Grafo* inicializaGrafo(int numVertices) {
 			gr->MatAdj[i][j] = FALSE;
 		}
 	}
+	calculaGrau(gr);
 	return gr;
 }
 
@@ -22,13 +23,15 @@ void liberaGrafo(Grafo* gr) {
 		free(gr->MatAdj[i]);
 	}
 	free(gr->MatAdj);
+	free(gr->grau);
 	free(gr);
 }
 
 int insereAresta(Grafo *gr, int i, int j) {
-	if (i >= 0 && i <  gr->numVertices && j > 0 && j < gr->numVertices) {
+	if (i >= 0 && i <  gr->numVertices && j >= 0 && j < gr->numVertices) {
 		gr->MatAdj[i][j] = TRUE;
 		gr->MatAdj[j][i] = TRUE;   // grafo não direcionado
+		printf("a ");
     return 1;
 	}
   else {
@@ -37,25 +40,25 @@ int insereAresta(Grafo *gr, int i, int j) {
 	}
 }
 
+int ConstroiGrafo(Grafo* gr, int qtdArestas, int **mat){
 
-int removeAresta(Grafo *gr, int i, int j) {
-	if (i >= 0 && i <  gr->numVertices && j > 0 && j < gr->numVertices) {
-		gr->MatAdj[i][j] = FALSE;
-		gr->MatAdj[j][i] = FALSE;  // grafo não direcionado
-	}
-  else {
-    printf("Argumentos inválidos\n");
-	}
+	for (int i=1; i<qtdArestas; i++)
+		if (!insereAresta(gr, mat[i][0], mat[i][1])) {
+			fprintf(stderr, "Falha na inserção da aresta. Cheque o arquivo de entrada.\n");
+			return 0;
+		}
+	return 1;
 }
 
-int verificaAresta(Grafo* gr, int i, int j) {
-
-  if (i >= 0 && i < gr->numVertices && j > 0 && j < gr->numVertices)
-		return gr->MatAdj[i][j];
-  else
-		return FALSE;
-
-}
+//
+// int verificaAresta(Grafo* gr, int i, int j) {
+//
+//   if (i >= 0 && i < gr->numVertices && j > 0 && j < gr->numVertices)
+// 		return gr->MatAdj[i][j];
+//   else
+// 		return FALSE;
+//
+// }
 
 
 void imprimeGrafo(Grafo* gr, FILE* arq){
@@ -67,6 +70,8 @@ void imprimeGrafo(Grafo* gr, FILE* arq){
   }
 }
 
+
+
 void calculaGrau(Grafo* gr){
 	int i,j;
 	gr->grau = calloc(sizeof(int),gr->numVertices);
@@ -76,5 +81,4 @@ void calculaGrau(Grafo* gr){
 				gr->grau[i]++;
 		}
 	}
-
 }
