@@ -1,4 +1,0 @@
-Tempo de execução:
-0.000015s (tempo de usuário) + 0.000000s (tempo de sistema) = 0.000015s (tempo total)
-
-3
