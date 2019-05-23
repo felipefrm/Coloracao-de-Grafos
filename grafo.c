@@ -1,29 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grafo.h"
+#include "entradaSaida.h"
 
-Grafo* inicializaGrafo(int numVertices) {
+Grafo* inicializaGrafo(FILE* arq) {
 
 	Grafo* gr = (Grafo*)malloc(sizeof(Grafo));
-	gr->numVertices = numVertices;
-	gr->MatAdj = (int**)malloc(sizeof(int*) * numVertices);
-	for (int i = 0; i < numVertices; i++) {
-		gr->MatAdj[i] = (int*)malloc(sizeof(int) * numVertices);
-		for (int j = 0; j < numVertices; j++) {
-			gr->MatAdj[i][j] = FALSE;
-		}
-	}
-	calculaGrau(gr);
+	gr->numVertices = leNumVertices(arq);
+	gr->MatAdj = alocaMatriz(gr->numVertices, gr->numVertices);
 	return gr;
 }
 
 void liberaGrafo(Grafo* gr) {
-	int i;
-	for (i = 0; i < gr->numVertices; i++) {
+	for (int i = 0; i < gr->numVertices; i++)
 		free(gr->MatAdj[i]);
-	}
 	free(gr->MatAdj);
-	free(gr->grau);
+	// free(gr->grau);
 	free(gr);
 }
 
@@ -31,20 +23,19 @@ int insereAresta(Grafo *gr, int i, int j) {
 	if (i >= 0 && i <  gr->numVertices && j >= 0 && j < gr->numVertices) {
 		gr->MatAdj[i][j] = TRUE;
 		gr->MatAdj[j][i] = TRUE;   // grafo não direcionado
-		printf("a ");
     return 1;
 	}
-  else {
-		printf("Argumentos inválidos\n");
-    return 0;
-	}
+  return 0;
 }
 
-int ConstroiGrafo(Grafo* gr, int qtdArestas, int **mat){
+int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida){
+
+	int qtdArestas = calculaQtdArestas(entrada);
+	int **mat = leArestas(entrada, qtdArestas);
 
 	for (int i=1; i<qtdArestas; i++)
 		if (!insereAresta(gr, mat[i][0], mat[i][1])) {
-			fprintf(stderr, "Falha na inserção da aresta. Cheque o arquivo de entrada.\n");
+			fprintf(saida, "Falha na inserção das arestas. Cheque o arquivo de entrada.\n");
 			return 0;
 		}
 	return 1;
@@ -72,13 +63,11 @@ void imprimeGrafo(Grafo* gr, FILE* arq){
 
 
 
-void calculaGrau(Grafo* gr){
-	int i,j;
-	gr->grau = calloc(sizeof(int),gr->numVertices);
-	for(i = 0; i < gr->numVertices; i++){
-		for(j = 0; j < gr->numVertices; j++){
-			if(gr->MatAdj[i][j])
-				gr->grau[i]++;
-		}
+int calculaGrau(Grafo* gr, int i){
+	int j, grau=0;
+	for(j = 0; j < gr->numVertices; j++){
+		if(gr->MatAdj[i][j])
+			grau++;
 	}
+	return grau;
 }

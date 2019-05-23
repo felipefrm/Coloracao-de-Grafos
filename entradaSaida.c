@@ -38,10 +38,9 @@ Arquivos* argumentosEntrada(int argc, char* argv[]){
 
 int** alocaMatriz(int linha, int coluna){
 
-  int **matriz = (int**)malloc(linha*sizeof(int*));
+  int **matriz = (int**)calloc(sizeof(int*), linha);
   for (int i=0; i<linha; i++)
-    matriz[i] = (int*)malloc(coluna*sizeof(int));
-
+    matriz[i] = (int*)calloc(sizeof(int), coluna);
   return matriz;
 }
 
@@ -57,28 +56,31 @@ int verificaArqVazio(FILE* arq){
 }
 
 int calculaQtdArestas(FILE* arq){
-  int qtdArestas = -1; // a primeira linha não é uma aresta, por isso -> (-1)
+  int qtdArestas = 0; // a primeira linha não é uma aresta, por isso -> (-1)
   while (!feof(arq))
-    if (fgetc(arq) == '\n' || feof(arq))                     // calcula a quantidade de veiculos
+    if (fgetc(arq) == '\n')                     // calcula a quantidade de arestas
       qtdArestas++;                                          // por meio da quantidade de '\n'
   rewind(arq);
+  printf("Qtd aresta: %d\n", qtdArestas);
   return qtdArestas;
 }
 
 int leNumVertices(FILE *arq){
-  int qtdAlgarismo = 0;
-  while (fgetc(arq) != '\n')  // quantidade de algarismos na primeira linha do arquivo
-    qtdAlgarismo++;           // onde está o número de vertices, para alocar
-  rewind(arq);                // a quantidade certa de memoria para receber o valor
+  // int qtdAlgarismo = 0;
+  // while (fgetc(arq) != '\n')  // quantidade de algarismos na primeira linha do arquivo
+  //   qtdAlgarismo++;           // onde está o número de vertices, para alocar
+  // rewind(arq);                // a quantidade certa de memoria para receber o valor
+  //
+  // char num_char[qtdAlgarismo+1];
+  // fgets(num_char, sizeof(num_char), arq); // lê do arq a primeira linha e guarda em num_char
+  // int num_int = 0;
+  // for (int i = qtdAlgarismo, j = 0; i>0; i--, j++){ // transforma char em int
+  //   num_int += (num_char[j]-48) * pow(10, i-1);     // num * 10^i
+  // }
+  int numVertices;
+  fscanf(arq, "%d", &numVertices);
 
-  char num_char[qtdAlgarismo+1];
-  fgets(num_char, sizeof(num_char), arq); // lê do arq a primeira linha e guarda em num_char
-  int num_int = 0;
-  for (int i = qtdAlgarismo, j = 0; i>0; i--, j++){ // transforma char em int
-    num_int += (num_char[j]-48) * pow(10, i-1);     // num * 10^i
-  }
-
-  return num_int;
+  return numVertices;
 }
 
 

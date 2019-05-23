@@ -7,14 +7,13 @@
 typedef struct grafo {
 	int numVertices;
 	int** MatAdj;        // Matriz de adjacencia
-	int* grau;
 } Grafo;
 
-Grafo* inicializaGrafo(int numVertices);
+Grafo* inicializaGrafo(FILE *arq);
 void liberaGrafo(Grafo* gr);
 int insereAresta(Grafo* gr, int i, int j);
-int ConstroiGrafo(Grafo* gr, int qtdArestas, int **mat);
-void calculaGrau(Grafo* gr);
+int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida);
+int calculaGrau(Grafo* gr, int i);
 void imprimeGrafo(Grafo* gr, FILE* arq);
 
 #endif

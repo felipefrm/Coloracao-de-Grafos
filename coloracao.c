@@ -50,19 +50,16 @@ int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int numVertices
    se for possível. */
 int Backtracking(int **MatAdj, int k, int numVertices){
 
-  int cor[numVertices];
-
-  for(int i=0; i<numVertices; i++)
-    cor[i]= 0;  // seta a cor de todos os vertices como 0
-
+  // seta a cor de todos os vertices como 0
+  int *cor = calloc(numVertices, sizeof(int));
   // chama coloracaoVertice() a partir do vertice de origem
   return coloracaoVertice(MatAdj, cor, k, 0, numVertices);
 }
 
-int AlgoritmoExato(int **MatAdj, int numVertices){
+int AlgoritmoExato(Grafo * gr){
   int k = 1;
-  while (1){
-  if (Backtracking(MatAdj, k, numVertices))
+  while (1){                                            // Algoritmo de força bruta que
+  if (Backtracking(gr->MatAdj, k, gr->numVertices))     // traz sempre a solução ótima
     break;
   k++;
   }
@@ -83,15 +80,15 @@ void insertionSort(Vertice* V, int numVertices){
     }
 }
 
-Vertice*  inicializaVetor(Grafo* gr){
+Vertice* inicializaVetorVertice(Grafo* gr){
   Vertice* V = malloc(gr->numVertices* sizeof(Vertice));
     for(int i = 0; i < gr->numVertices; i++){
       V[i].id = i;
-      V[i].grau = gr->grau[i];
       V[i].corDefinitiva = FALSE;
       V[i].cor = 0;
+      V[i].grau = calculaGrau(gr, i);
     }
-    insertionSort(V,gr->numVertices);
+    insertionSort(V, gr->numVertices);
     return V;
 }
 
@@ -99,7 +96,7 @@ int heuristica1(Grafo* gr){
   /* Primeiro, criamos um vetor de struct Vertice que guarda o número dos vértices
   e o seu respectivo grau. Depois, na função inicializaVetor, salvamos os valores no vetor
   e ordenamos ele com a função insertionSort*/
-  Vertice* V = inicializaVetor(gr);
+  Vertice* V = inicializaVetorVertice(gr);
   int k = 1;
   for(int i=0; i < gr->numVertices; i++){
     V[i].corDefinitiva = TRUE;
@@ -128,5 +125,6 @@ int heuristica1(Grafo* gr){
   }
   for(int i=0;i<gr->numVertices;i++)
     printf("%d cor: %d\n",V[i].id,V[i].cor);
+  free(V);
   return k;
 }
