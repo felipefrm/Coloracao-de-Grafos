@@ -75,8 +75,7 @@ void insertionSort(Vertice* V, int numVertices){
 
 Vertice*  inicializaVetor( Grafo* gr){
   Vertice* V = malloc(gr->numVertices* sizeof(Vertice));
-    int i;
-    for(i = 0; i < gr->numVertices; i++){
+    for(int i = 0; i < gr->numVertices; i++){
       V[i].id = i;
       V[i].grau = gr->grau[i];
       V[i].corDefinitiva = FALSE;
@@ -91,29 +90,33 @@ int heuristica1(Grafo* gr){
   e o seu respectivo grau. Depois, na função inicializaVetor, salvamos os valores no vetor
   e ordenamos ele com a função insertionSort*/
   Vertice* V = inicializaVetor(gr);
-  int* cores = calloc(gr->numVertices,sizeof(int));
-  for(int i=0; i < gr->numVertices;i++)
-    cores[i] = i;
-  // printf("\n vetor: ");
-  // for(int i=0;i<gr->numVertices;i++)
-  //   printf("%d ",V[i].id);
+  V[i].corDefinitiva = TRUE;
+  int k = 1;
   for(int i=0; i < gr->numVertices; i++){
-    V[i].corDefinitiva = TRUE;
     V[i].cor = 1;
     int controle = 0;
     while(V[i].cor > controle){
-    for(int j = 0; j<gr->numVertices;j++){
-      if(gr->MatAdj[i][j] && V[i].cor == V[j].cor)
-        V[i].cor++;
-        break;
+      for(int j = 0; j < gr->numVertices; j++){
+        if(gr->MatAdj[V[i].id][V[j].id] && V[i].cor == V[j].cor){
+          V[i].cor++;
+          break;
+        }
+      }
+      controle++;
     }
-    controle++;
-  }
 
-    for(int j =0; j<gr->numVertices;j++){
-      if(gr->MatAdj[i][j] && !V[j].corDefinitva){
+    for(int j = 0; j < gr->numVertices; j++){
+      if(gr->MatAdj[V[i].id][V[i].id] && !V[j].corDefinitiva){
         V[j].cor = V[i].cor ;
       }
     }
+    if(V[i].cor > k)
+      k = V[i].cor;
+      // for(int i=0;i<gr->numVertices;i++)
+      //   printf("%d cor: %d\n",V[i].id,V[i].cor);
+      //   printf("\n");
   }
+  for(int i=0;i<gr->numVertices;i++)
+    printf("%d cor: %d\n",V[i].id,V[i].cor);
+  return k;
 }
