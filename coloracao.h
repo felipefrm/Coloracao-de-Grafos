@@ -4,9 +4,10 @@
 
 typedef struct vertice {
 	int id;
-	int grau;
   int cor;
   int corDefinitiva;
+	int grauAresta;
+	int grauSaturacao;
 } Vertice;
 
 int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int numVertices);
@@ -17,5 +18,10 @@ int AlgoritmoExato(Grafo* gr);
 void insertionSort(Vertice* V, int numVertices);
 Vertice* inicializaVetorIndice(Grafo* gr);
 int heuristica1(Grafo* gr);
+
+int heuristica2(Grafo* gr);
+void atualizaSaturacao(Grafo* gr,Vertice* V,int maisSaturado);
+int novoMaisSaturado(Grafo* gr,Vertice* V);
+void atribuiCor(Grafo* gr,Vertice* V,int maisSaturado);
 
 #endif

@@ -87,21 +87,29 @@ int leNumVertices(FILE *arq){
 int** leArestas(FILE *arq, int qtdArestas){
   int **mat = alocaMatriz(qtdArestas, 2);
   char c;
+
   for (int i=0; i < qtdArestas; i++){
     for (int j=0; (c = fgetc(arq)) != '\n' && !feof(arq); j++){
         if (j == 0){
 
           mat[i][0] = c - 48;
-          printf("%d ", mat[i][0]);
+          // printf("%d ", mat[i][0]);
         }
         if (j == 2){
 
           mat[i][1] = c - 48;
-          printf("%d\n", mat[i][1]);
+          // printf("%d\n", mat[i][1]);
         }
 
     }
     fscanf(arq, "\n");
+
+  }
+
+  for (int i=0; i<qtdArestas; i++){
+    for (int j=0; j<2; j++)
+    printf("%d ", mat[i][j]);
+    printf("\n");
   }
   return mat;
 }

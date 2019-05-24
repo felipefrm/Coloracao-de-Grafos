@@ -72,7 +72,7 @@ void insertionSort(Vertice* V, int numVertices){
     for (i = 1; i < numVertices; i++){
         key = V[i];
         j = i - 1;
-        while (j >= 0 && V[j].grau < key.grau){
+        while (j >= 0 && V[j].grauAresta < key.grauAresta){
             V[j + 1] = V[j];
             j = j - 1;
         }
@@ -86,7 +86,8 @@ Vertice* inicializaVetorVertice(Grafo* gr){
       V[i].id = i;
       V[i].corDefinitiva = FALSE;
       V[i].cor = 0;
-      V[i].grau = calculaGrau(gr, i);
+      V[i].grauAresta = calculaGrau(gr, i);
+      V[i].grauSaturacao = 0;
     }
     insertionSort(V, gr->numVertices);
     return V;
@@ -128,3 +129,47 @@ int heuristica1(Grafo* gr){
   free(V);
   return k;
 }
+
+void atribuiCor(Grafo* gr,Vertice* V,int maisSaturado){
+  for(int i = 0; i < gr->numVertices; i++){
+    if(gr->MatAdj[V[maisSaturado].id][i] && V[maisSaturado].cor == V[i].cor){
+      V[maisSaturado].cor++;
+      i = 0;
+    }
+  }
+}
+
+int novoMaisSaturado(Grafo* gr,Vertice* V){
+  int maior = -1;
+  for(int i=0; i < gr->numVertices; i++){
+    if(V[i].grauSaturacao > maior && !V[i].corDefinitiva){
+      maior = i;
+    }
+  }
+  return maior;
+}
+
+void atualizaSaturacao(Grafo* gr,Vertice* V,int maisSaturado){
+  for(int i = 0; i < gr->numVertices;i++){
+    if(gr->MatAdj[i][V[maisSaturado].id])
+      V[i].grauSaturacao++;
+  }
+}
+
+int heuristica2(Grafo* gr){
+  Vertice* V = inicializaVetorVertice(gr);
+  int maisSaturado = 0, cor = 0;
+  int k = 1;
+  for(int i = 0; i < gr->numVertices; i++){
+    V[maisSaturado].corDefinitiva = TRUE;
+    V[maisSaturado].cor = 1;
+    atribuiCor(gr,V,maisSaturado);
+    if(V[maisSaturado].cor > k)
+      k = V[maisSaturado].cor;
+    atualizaSaturacao(gr,V,maisSaturado);
+    maisSaturado = novoMaisSaturado(gr,V);
+    }
+
+    return k;
+
+  }

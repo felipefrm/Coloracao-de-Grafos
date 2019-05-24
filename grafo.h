@@ -12,7 +12,7 @@ typedef struct grafo {
 Grafo* inicializaGrafo(FILE *arq);
 void liberaGrafo(Grafo* gr);
 int insereAresta(Grafo* gr, int i, int j);
-int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida);
+int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida, int qtdArestas);
 int calculaGrau(Grafo* gr, int i);
 void imprimeGrafo(Grafo* gr, FILE* arq);
 

@@ -15,7 +15,6 @@ void liberaGrafo(Grafo* gr) {
 	for (int i = 0; i < gr->numVertices; i++)
 		free(gr->MatAdj[i]);
 	free(gr->MatAdj);
-	// free(gr->grau);
 	free(gr);
 }
 
@@ -28,9 +27,9 @@ int insereAresta(Grafo *gr, int i, int j) {
   return 0;
 }
 
-int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida){
+int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida, int qtdArestas){
 
-	int qtdArestas = calculaQtdArestas(entrada);
+	// int qtdArestas = calculaQtdArestas(entrada);
 	int **mat = leArestas(entrada, qtdArestas);
 
 	for (int i=1; i<qtdArestas; i++)
