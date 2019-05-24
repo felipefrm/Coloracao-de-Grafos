@@ -8,10 +8,10 @@ int main(int argc, char *argv[]){
 
   Arquivos* arq = argumentosEntrada(argc, argv);
   if (arq->flag && verificaArqVazio(arq->entrada)){
-    int qtdArestas = calculaQtdArestas(arq->entrada);
-    Grafo* gr = inicializaGrafo(arq->entrada);
+    // int qtdArestas = calculaQtdArestas(arq->entrada);
 
-    if (ConstroiGrafo(gr, arq->entrada, arq->saida, qtdArestas)){
+    Grafo* gr = inicializaGrafo(arq->entrada);
+    if (ConstroiGrafo(gr, arq->entrada, arq->saida)){
 
       int k;
       double utime_ant, utime_pos, stime_ant, stime_pos;

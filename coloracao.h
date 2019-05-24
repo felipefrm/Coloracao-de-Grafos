@@ -10,13 +10,13 @@ typedef struct vertice {
 	int grauSaturacao;
 } Vertice;
 
-int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int numVertices);
-int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int numVertices);
-int Backtracking(int **MatAdj, int k, int numVertices);
+int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int qtdVertices);
+int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices);
+int Backtracking(int **MatAdj, int k, int qtdVertices);
 int AlgoritmoExato(Grafo* gr);
 
-void insertionSort(Vertice* V, int numVertices);
-Vertice* inicializaVetorIndice(Grafo* gr);
+void insertionSort(Vertice* V, int qtdVertices);
+Vertice* inicializaVetorVertice(Grafo* gr, int caso);
 int heuristica1(Grafo* gr);
 
 int heuristica2(Grafo* gr);
