@@ -29,9 +29,6 @@ int insereAresta(Grafo *gr, int i, int j) {
 
 int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida){
 
-	// int qtdArestas = calculaQtdArestas(entrada);
-	// int **mat = leArestas(entrada, qtdArestas);
-
 	int origem, destino;
 	while (!feof(entrada)){
 		fscanf(entrada, "%d %d\n", &origem, &destino);
@@ -39,11 +36,9 @@ int ConstroiGrafo(Grafo* gr, FILE* entrada, FILE* saida){
 		if (!insereAresta(gr, origem, destino)) {
 			fprintf(saida, "Falha na inserção das arestas. Cheque o arquivo de entrada.\n");
 			return 0;
-	}
-
-	// for (int i=0; i<qtdArestas; i++)
 		}
-		return 1;
+	}
+	return 1;
 }
 
 

@@ -69,27 +69,9 @@ int calculaQtdArestas(FILE* arq){
   printf("%d\n", qtdNumeros);
   printf("Numero arestas: %d\n", qtdNumeros/2);
   return (int)(qtdNumeros/2);
-  // int qtdArestas = 0; // a primeira linha não é uma aresta, por isso -> (-1)
-  // while (!feof(arq))
-  //   if (fgetc(arq) == '\n')                     // calcula a quantidade de arestas
-  //     qtdArestas++;                                          // por meio da quantidade de '\n'
-  // rewind(arq);
-  // printf("Qtd aresta: %d\n", qtdArestas);
-  // return qtdArestas;
 }
 
 int leQtdVertices(FILE *arq){
-  // int qtdAlgarismo = 0;
-  // while (fgetc(arq) != '\n')  // quantidade de algarismos na primeira linha do arquivo
-  //   qtdAlgarismo++;           // onde está o número de vertices, para alocar
-  // rewind(arq);                // a quantidade certa de memoria para receber o valor
-  //
-  // char num_char[qtdAlgarismo+1];
-  // fgets(num_char, sizeof(num_char), arq); // lê do arq a primeira linha e guarda em num_char
-  // int num_int = 0;
-  // for (int i = qtdAlgarismo, j = 0; i>0; i--, j++){ // transforma char em int
-  //   num_int += (num_char[j]-48) * pow(10, i-1);     // num * 10^i
-  // }
   int qtdVertices;
   fscanf(arq, "%d", &qtdVertices);
   fscanf(arq, "\n");
@@ -101,50 +83,9 @@ int leQtdVertices(FILE *arq){
 int** leArestas(FILE *arq, int qtdArestas){
   int **mat = alocaMatriz(qtdArestas, 2);
   char c;
-
-
   for (int i=0; i<qtdArestas; i++){
     fscanf(arq, "%d %d\n", &mat[i][0], &mat[i][1]);
-}
-
-
-
-    // printf("i: %d\n", i);
-    // for (int j=0; j<2; j++){
-    //   printf("j: %d\n", j);
-    //
-    //   fscanf(arq, "%d", mat[i][j]);
-    //   printf("%d", mat[i][j]);
-    //   // if (j==0)
-    //   //   fscanf(arq, "%c");
-    //   // if (j==1)
-    //   //   fscanf(arq, "%c");
-    // }
-  // }
-    // }
-  //
-  // for (int i=0; i < qtdArestas; i++){
-  //   for (int j=0; (c = fgetc(arq)) != '\n' && !feof(arq); j++){
-  //       // printf("i = %d, j = %d, c = %c\n", i, j, c);
-  //       if (j == 0){
-  //           mat[i][0] = c - 48;
-  //           printf("%d ", mat[i][0]);
-  //         }
-  //       if (j == 2){
-  //
-  //         mat[i][1] = c - 48;
-  //         printf("%d\n", mat[i][1]);
-  //       }
-  //
-  //   }
-  //
-  // }
-
-  // for (int i=0; i<qtdArestas; i++){
-  //   for (int j=0; j<2; j++)
-  //   printf("%d ", mat[i][j]);
-  //   printf("\n");
-  // }
+  }
   return mat;
 }
 

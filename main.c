@@ -8,7 +8,6 @@ int main(int argc, char *argv[]){
 
   Arquivos* arq = argumentosEntrada(argc, argv);
   if (arq->flag && verificaArqVazio(arq->entrada)){
-    // int qtdArestas = calculaQtdArestas(arq->entrada);
 
     Grafo* gr = inicializaGrafo(arq->entrada);
     if (ConstroiGrafo(gr, arq->entrada, arq->saida)){
