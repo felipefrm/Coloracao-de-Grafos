@@ -12,7 +12,7 @@ typedef struct vertice {
 
 int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int qtdVertices);
 int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices);
-int Backtracking(int **MatAdj, int k, int qtdVertices);
+int Backtracking(Grafo* gr, int k);
 int AlgoritmoExato(Grafo* gr);
 
 void insertionSort(Vertice* V, int qtdVertices);

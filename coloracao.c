@@ -16,14 +16,16 @@ int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int qtdVertices){
 }
 
 // Função recursiva que retorna no fim o valor minimo k de cor para dado grafo
-int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices) {
+int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices){
 
-  if(vertice == qtdVertices)  // Caso base: se todos os vertices já estão coloridos
+  if(vertice == qtdVertices){
       return 1;
+    }  // Caso base: se todos os vertices já estão coloridos
 
   else {
     // verifica diferente cores para o vertice
     for(int c = 1; c <= k; c++){
+      printf("%d ", c);
       //verifica se a cor atual pode ser atribuida ao vertice
       if(verificaCor(MatAdj, cor, c, vertice, qtdVertices)) {
         cor[vertice] = c;
@@ -32,8 +34,8 @@ int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices
           return 1;
         }
 
-        /*se c não for hábil para colorir o vertice, é testado uma nova cor
-          removendo a atribuição feita anteriormente (cor[vertice] = c)*/
+        /*se não for possível construir a árvore de recursividade a partir
+          de c, ocorre o "backtracking" removendo o c do vertice (cor[vertice] = 0)*/
         cor[vertice] = 0;
       }
     }
@@ -43,21 +45,22 @@ int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices
   }
 }
 
-int Backtracking(int **MatAdj, int k, int qtdVertices){
+int Backtracking(Grafo* gr, int k){
 
-  int cor[qtdVertices];
+  // Vertice* V = inicializaVetorVertice(gr, 0);
+  int cor[gr->qtdVertices];
 
-  for(int i=0; i<qtdVertices; i++)
+  for(int i=0; i<gr->qtdVertices; i++)
     cor[i]= 0;  // seta a cor de todos os vertices como 0
 
   // chama coloracaoVertice() a partir do vertice de origem
-  return coloracaoVertice(MatAdj, cor, k, 0, qtdVertices);
+  return coloracaoVertice(gr->MatAdj, cor, k, 0, gr->qtdVertices);
 }
 
 int AlgoritmoExato(Grafo* gr){
   int k = 1;
   while (1){
-  if (Backtracking(gr->MatAdj, k, gr->qtdVertices))
+  if (Backtracking(gr, k))
     break;
   k++;
   }
@@ -78,7 +81,7 @@ void insertionSort(Vertice* V, int qtdVertices){
     }
 }
 
-Vertice*  inicializaVetorVertice(Grafo* gr,int caso){
+Vertice*  inicializaVetorVertice(Grafo* gr, int caso){
   Vertice* V = malloc(gr->qtdVertices* sizeof(Vertice));
     for(int i = 0; i < gr->qtdVertices; i++){
       V[i].id = i;
@@ -88,7 +91,7 @@ Vertice*  inicializaVetorVertice(Grafo* gr,int caso){
       V[i].grauSaturacao = 0;
     }
     if(caso == 1){
-      insertionSort(V,gr->qtdVertices);
+      insertionSort(V, gr->qtdVertices);
     }
     return V;
 }
@@ -154,7 +157,7 @@ void atualizaSaturacao(Grafo* gr,Vertice* V,int maisSaturado){
   }
 }
 int heuristica2(Grafo* gr){
-  Vertice* V = inicializaVetorVertice(gr,2);
+  Vertice* V = inicializaVetorVertice(gr, 2);
   int maisSaturado = 0, cor = 0;
   int k = 1;
   for(int i = 0; i < gr->qtdVertices; i++){
