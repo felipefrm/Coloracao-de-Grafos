@@ -20,8 +20,8 @@ Vertice* inicializaVetorVertice(Grafo* gr, int caso);
 int heuristica1(Grafo* gr);
 
 int heuristica2(Grafo* gr);
-void atualizaSaturacao(Grafo* gr,Vertice* V,int maisSaturado);
-int novoMaisSaturado(Grafo* gr,Vertice* V);
-void atribuiCor(Grafo* gr,Vertice* V,int maisSaturado);
+void atualizaSaturacao(Grafo* gr, Vertice* V, int maisSaturado);
+int novoMaisSaturado(Grafo* gr, Vertice* V);
+void atribuiCor(Grafo* gr, Vertice* V, int node, int heuristica);
 
 #endif

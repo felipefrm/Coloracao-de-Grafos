@@ -12,9 +12,8 @@ int** alocaMatriz(int linha, int coluna);
 int verificaArqVazio(FILE* arq);
 int calculaQtdArestas(FILE* arq);
 int leQtdVertices(FILE *arq);
-int** leArestas(FILE *arq, int qtdArestas);
 void contaTempoProcessador(double *utime, double *stime);
-void imprimeTempo(double user_time, double system_time, FILE* arq);
+void imprimeSaida(double user_time, double system_time, int k, int alg, FILE* arq);
 void liberaArquivos(Arquivos *arq);
 
 #endif

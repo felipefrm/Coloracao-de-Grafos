@@ -36,6 +36,7 @@ Arquivos* argumentosEntrada(int argc, char* argv[]){
   return arq;
 }
 
+
 int** alocaMatriz(int linha, int coluna){
 
   int **matriz = (int**)calloc(sizeof(int*), linha);
@@ -43,6 +44,7 @@ int** alocaMatriz(int linha, int coluna){
     matriz[i] = (int*)calloc(sizeof(int), coluna);
   return matriz;
 }
+
 
 int verificaArqVazio(FILE* arq){
   int tamanho_arq;
@@ -55,39 +57,14 @@ int verificaArqVazio(FILE* arq){
   return 1;      // procedimentos
 }
 
-int calculaQtdArestas(FILE* arq){
-  // int qtdVertices;
-  // fscanf(arq, "%d", qtdVertices);
-  char c;
-  int qtdNumeros=-1;
-  while (!feof(arq)){
-    c = fgetc(arq);
-    if (c >= 48 && c <=57)
-      qtdNumeros++;
-  }
-  rewind(arq);
-  printf("%d\n", qtdNumeros);
-  printf("Numero arestas: %d\n", qtdNumeros/2);
-  return (int)(qtdNumeros/2);
-}
 
 int leQtdVertices(FILE *arq){
   int qtdVertices;
   fscanf(arq, "%d", &qtdVertices);
   fscanf(arq, "\n");
-
   return qtdVertices;
 }
 
-
-int** leArestas(FILE *arq, int qtdArestas){
-  int **mat = alocaMatriz(qtdArestas, 2);
-  char c;
-  for (int i=0; i<qtdArestas; i++){
-    fscanf(arq, "%d %d\n", &mat[i][0], &mat[i][1]);
-  }
-  return mat;
-}
 
 void contaTempoProcessador(double *utime, double *stime){
   struct rusage resources;
@@ -96,10 +73,21 @@ void contaTempoProcessador(double *utime, double *stime){
   *stime = (double) resources.ru_stime.tv_sec + 1.e-6 * (double) resources.ru_stime.tv_usec;
 }
 
-void imprimeTempo(double user_time, double system_time, FILE* arq){
+
+void imprimeSaida(double user_time, double system_time, int k, int alg, FILE* arq){
+
+  if (alg == 1)
+  fprintf(arq, "--- Força Bruta (backtracking) ---\n\n");
+  else if (alg == 2)
+  fprintf(arq, "--- Heuristica 1 ---\n\n");
+  else if (alg == 3)
+  fprintf(arq, "--- Heuristica 2 ---\n\n");
+
+  fprintf(arq, "%d\n\n", k);
   fprintf(arq, "Tempo de execução:\n");
   fprintf(arq, "%fs (tempo de usuário) + %fs (tempo de sistema) = %fs (tempo total)\n\n", user_time, system_time, user_time+system_time);
 }
+
 
 void liberaArquivos(Arquivos *arq){
   fclose(arq->entrada);
