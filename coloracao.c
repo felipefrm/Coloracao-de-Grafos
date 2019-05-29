@@ -7,10 +7,10 @@
    Isto é, checa se a aresta existe ou não (MatAdj[v][i] == 1), se existe, então é
    verificado se a cor a ser atribuida ao vertice atual já foi usado por um outro
    vertice adjacente ou não (veticeAtual == cor[i]) */
-int verificaCor(int **MatAdj, int *cor, int corAtual, int v, int qtdVertices){
+int verificaCor(int **MatAdj, int *cor, int corAtual, int vertice, int qtdVertices){
 
   for(int i=0; i<qtdVertices; i++) // Checando se algum vertice adjacente tem a mesma cor
-    if(MatAdj[v][i] && corAtual == cor[i])
+    if(MatAdj[vertice][i] && corAtual == cor[i])
       return 0;
   return 1;
 }
@@ -36,7 +36,8 @@ int coloracaoVertice(int **MatAdj, int *cor, int k, int vertice, int qtdVertices
         }
 
         /*se não for possível construir a árvore de recursividade a partir
-          de c, ocorre o "backtracking" removendo o c do vertice (cor[vertice] = 0)*/
+          de c, ocorre o "backtracking" removendo o c do vertice (cor[vertice] = 0)
+          e outra cor é testada*/
         cor[vertice] = 0;
       }
     }
@@ -60,8 +61,8 @@ int Backtracking(Grafo* gr, int k){
 
 
 int AlgoritmoExato(Grafo* gr){
-  int k = 1;
-  while (1){
+  int k = 1;        // testa primeiramente para k = 1
+  while (1){        // e incrementa 1 a cada vez que o Backtracking() retorna 0
   if (Backtracking(gr, k))
     break;
   k++;
@@ -69,63 +70,66 @@ int AlgoritmoExato(Grafo* gr){
   return k;
 }
 
-
+// Ordena o vetor do maior para o menor grau de arestas
 void insertionSort(Vertice* V, int qtdVertices){
-    int i, j;
-    Vertice key;
-    for (i = 1; i < qtdVertices; i++){
-        key = V[i];
-        j = i - 1;
-        while (j >= 0 && V[j].grauAresta < key.grauAresta){
-            V[j + 1] = V[j];
-            j = j - 1;
-        }
-        V[j + 1] = key;
+  int i, j;
+  Vertice key;
+  for (i = 1; i < qtdVertices; i++){
+    key = V[i];
+    j = i - 1;
+    while (j >= 0 && V[j].grauAresta < key.grauAresta){
+      V[j + 1] = V[j];
+      j = j - 1;
     }
+    V[j + 1] = key;
+  }
 }
 
-
+// Função que inicializa o vetor que será utilizado nas heurísticas
 Vertice*  inicializaVetorVertice(Grafo* gr, int caso){
   Vertice* V = malloc(gr->qtdVertices * sizeof(Vertice));
-    for(int i = 0; i < gr->qtdVertices; i++){
-      V[i].id = i;
-      V[i].grauAresta = calculaGrau(gr, i);
-      V[i].corDefinitiva = FALSE;
-      V[i].cor = 0;
-      V[i].grauSaturacao = 0;
-    }
-    if(caso == 1){
-      insertionSort(V, gr->qtdVertices);
-    }
-    return V;
+  for(int i = 0; i < gr->qtdVertices; i++){
+    V[i].id = i;
+    V[i].grauAresta = calculaGrau(gr, i);
+    V[i].corDefinitiva = FALSE;
+    V[i].cor = 0;
+    V[i].grauSaturacao = 0;
+  }
+  // Se for a heurística 1, ordena o vetor em ordem decrescente
+  if(caso == 1){
+    insertionSort(V, gr->qtdVertices);
+  }
+  return V;
 }
 
 
 int heuristica1(Grafo* gr){
   /* Primeiro, criamos um vetor de struct Vertice que guarda o número dos vértices
-  e o seu respectivo grau. Depois, na função inicializaVetorVertice, salvamos os valores no vetor
-  e ordenamos ele com a função insertionSort*/
+     e o seu respectivo grau. Depois, na função inicializaVetorVertice, salvamos os valores no vetor
+     e ordenamos ele com a função insertionSort */
   Vertice* V = inicializaVetorVertice(gr, 1);
   int k = 1;
   for(int i=0; i < gr->qtdVertices; i++){
     V[i].corDefinitiva = TRUE;
     V[i].cor = 1;
-    atribuiCor(gr, V, i, 1);
+    atribuiCor(gr, V, i, 1);  //Atribui uma cor possível para o vértice sob análise
 
-    for(int j = 0; j < gr->qtdVertices; j++){
-      if(gr->MatAdj[V[i].id][V[i].id] && !V[j].corDefinitiva){
+    for(int j = 0; j < gr->qtdVertices; j++){                   //Loop que colore os vértices adjacentes
+      if(gr->MatAdj[V[i].id][V[i].id] && !V[j].corDefinitiva){  //que aida não tem cor definitiva
         V[j].cor = V[i].cor ;
       }
     }
+    /* Verifica se a cor do vértice é maior que a maior cor ja encontrada
+       Se for, atualiza o k */
     if(V[i].cor > k)
       k = V[i].cor;
   }
-
   free(V);
   return k;
 }
 
-
+/* Função utilizada pelas duas heuristicas que atribui uma cor possível ao nó
+   sob análise */
 void atribuiCor(Grafo* gr, Vertice* V, int node, int heuristica){
   if(heuristica == 2){
     for(int i = 0; i < gr->qtdVertices; i++){
@@ -150,7 +154,7 @@ void atribuiCor(Grafo* gr, Vertice* V, int node, int heuristica){
   return;
 }
 
-
+//Encontra o vértice com maior grau de saturação, que ainda não tem cor definitiva
 int novoMaisSaturado(Grafo* gr, Vertice* V){
   int  maior = -1, controle = 0;
   for(int i=0; i < gr->qtdVertices; i++){
@@ -162,7 +166,7 @@ int novoMaisSaturado(Grafo* gr, Vertice* V){
   return maior;
 }
 
-
+//Função que atualiza o grau de saturação de todos os vértices
 void atualizaSaturacao(Grafo* gr, Vertice* V, int maisSaturado){
   for(int i = 0; i < gr->qtdVertices;i++){
     if(gr->MatAdj[i][V[maisSaturado].id])
@@ -176,22 +180,23 @@ int heuristica2(Grafo* gr){
   Vertice* V = inicializaVetorVertice(gr, 2);
   int maisSaturado = 0, cor = 0;
   int k = 1;
-  for(int i = 0; i < gr->qtdVertices; i++){
+  for(int i = 0; i < gr->qtdVertices; i++){  //Percorre todos os vértices para colorí-los
     V[maisSaturado].corDefinitiva = TRUE;
     V[maisSaturado].cor = 1;
     int corControle = 0;
-
+    //Atribui a primeira cor possível ao vértice atual
     while(corControle < V[maisSaturado].cor){
       atribuiCor(gr, V, maisSaturado, 2);
         corControle++;
       if(corControle > gr->qtdVertices)
         break;
     }
+    //Atualiza o maior número de cores, quando necessário
     if(V[maisSaturado].cor > k)
       k = V[maisSaturado].cor;
     atualizaSaturacao(gr, V, maisSaturado);
     maisSaturado = novoMaisSaturado(gr, V);
-    }
+  }
   free(V);
   return k;
 }

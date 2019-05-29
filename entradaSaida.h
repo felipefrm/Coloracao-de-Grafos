@@ -1,11 +1,11 @@
 #ifndef ENTRADASAIDA
 #define ENTRADASAIDA
 
-struct arquivos {
+typedef struct arquivos {
   FILE* entrada;
   FILE* saida;
   int flag;   // flag para poder retornar 0 em caso de erro
-}; typedef struct arquivos Arquivos;
+} Arquivos;
 
 Arquivos* argumentosEntrada(int argc, char* argv[]);
 int** alocaMatriz(int linha, int coluna);

@@ -9,7 +9,7 @@ Arquivos* argumentosEntrada(int argc, char* argv[]){
 
   Arquivos* arq = malloc(sizeof(Arquivos));   // armazena os ponteiros dos arquivos
   int opcao;
-  arq->flag = 1;                                  // passados por linha de comando em uma struct
+  arq->flag = 1;                              // passados por linha de comando em uma struct
   if (argc < 5){
     fprintf(stderr, "Use: ./tp3 -i [ARQUIVO DE ENTRADA DE DADOS] -o [ARQUIVO DE SAIDA]\n");
     arq->flag = 0;
@@ -60,8 +60,8 @@ int verificaArqVazio(FILE* arq){
 
 int leQtdVertices(FILE *arq){
   int qtdVertices;
-  fscanf(arq, "%d", &qtdVertices);
-  fscanf(arq, "\n");
+  fscanf(arq, "%d", &qtdVertices);  // le somente a primeira linha do arquivo
+  fscanf(arq, "\n");                // que contem a quantidade de vértices
   return qtdVertices;
 }
 

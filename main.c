@@ -4,13 +4,14 @@
 #include "coloracao.h"
 #include "entradaSaida.h"
 
-int main(int argc, char *argv[]){
+
+void main(int argc, char *argv[]){
 
   Arquivos* arq = argumentosEntrada(argc, argv);
   if (arq->flag && verificaArqVazio(arq->entrada)){
 
     Grafo* gr = inicializaGrafo(arq->entrada);
-    if (ConstroiGrafo(gr, arq->entrada, arq->saida)){
+    if (ConstroiGrafo(gr, arq->entrada)){
 
       int k, opcao;
       double utime_ant, utime_pos, stime_ant, stime_pos;
@@ -22,46 +23,46 @@ int main(int argc, char *argv[]){
       switch (opcao){
 
         case 0:
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = AlgoritmoExato(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 1, arq->saida);
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = heuristica1(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 2, arq->saida);
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = heuristica2(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 3, arq->saida);
-        break;
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = AlgoritmoExato(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 1, arq->saida);
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = heuristica1(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 2, arq->saida);
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = heuristica2(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 3, arq->saida);
+          break;
 
         case 1:
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = AlgoritmoExato(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
-        break;
-        case 2:
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = AlgoritmoExato(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
+          break;
 
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = heuristica1(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
-        break;
+        case 2:
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = heuristica1(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
+          break;
 
         case 3:
-        contaTempoProcessador(&utime_ant, &stime_ant);
-        k = heuristica2(gr);
-        contaTempoProcessador(&utime_pos, &stime_pos);
-        imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
-        break;
+          contaTempoProcessador(&utime_ant, &stime_ant);
+          k = heuristica2(gr);
+          contaTempoProcessador(&utime_pos, &stime_pos);
+          imprimeSaida(utime_pos-utime_ant, stime_pos-stime_ant, k, 0, arq->saida);
+          break;
 
         default:
-        printf("Não existe esta opção.\n");
+          printf("Não existe esta opção.\n");
       }
     }
-  liberaGrafo(gr);
-  liberaArquivos(arq);
+    liberaGrafo(gr);
+    liberaArquivos(arq);
   }
 }
