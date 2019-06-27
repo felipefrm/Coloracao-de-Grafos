@@ -1,5 +1,9 @@
 # Coloração de Grafos
 
+## Resumo
+
+Estudo da teoria de grafos aplicado a à coloração de vértices. Uma coloração em um grafo, consiste na atribuição de cores aos vértices de modo que vértices adjacentes tenham cores distintas. A solução do problema do número cromático em grafo tem como objetivo determinar o menor valor de que possibilite uma coloração. Foi implementado duas heurísticas e um algoritmo exato para a resolução do problema.
+
 ## Passo-a-passo para execução do programa
 
 1. Compile o programa com o utilitário makefile:
